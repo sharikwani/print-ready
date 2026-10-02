@@ -104,7 +104,7 @@ def test_fix_image_produces_correct_boxes_and_cmyk(art, tmp_path):
     assert abs((b["/TrimBox"][0] - b["/BleedBox"][0]) - 3) < 0.05
     assert res.crop_marks
     with pikepdf.open(out) as pdf:
-        img = next(iter(pdf.pages[0].images.values()))
+        img = pdf.pages[0].obj.Resources.XObject.Im0
         assert img.ColorSpace == "/DeviceCMYK"
     # the fixed file passes preflight
     assert check_file(out, get_product("business_card")).verdict == "ready"
@@ -122,7 +122,7 @@ def test_fixed_file_preserves_colour_roughly(art, tmp_path):
     a = src.getpixel((30, src.height // 2))
     bw, bh = rendered.size
     b = rendered.getpixel((int(bw * 0.06), bh // 2))
-    assert sum(abs(x - y) for x, y in zip(a, b)) < 90, (a, b)
+    assert sum(abs(x - y) for x, y in zip(a, b, strict=True)) < 90, (a, b)
 
 
 @pytest.mark.parametrize("jpeg", [None, 90])
@@ -141,7 +141,7 @@ def test_vector_passthrough_keeps_text_vector(art, tmp_path):
     res = make_print_ready([art["pdf_good"]], get_product("business_card"), out)
     assert "vector" in res.color
     with pikepdf.open(out) as pdf:
-        assert len(pdf.pages[0].images) == 0  # nothing rasterised
+        assert '/Im0' not in pdf.pages[0].obj.Resources.get('/XObject', {})  # nothing rasterised
     # bleed must survive (qpdf form xobjects default to the TrimBox)
     doc = pdfium.PdfDocument(str(out))
     im = doc[0].render(scale=3).to_pil().convert("RGB")

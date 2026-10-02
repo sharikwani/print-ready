@@ -31,7 +31,7 @@ dependencies = [
 
 [project.optional-dependencies]
 render = ["playwright>=1.44"]
-dev = ["pytest>=8", "reportlab>=4", "ruff>=0.5"]
+dev = ["pytest>=8", "reportlab>=4", "ruff>=0.5,<1"]
 
 [project.urls]
 Homepage = "https://github.com/sharikwani/print-ready"
@@ -54,3 +54,8 @@ addopts = "-q"
 [tool.ruff]
 line-length = 130
 target-version = "py310"
+
+[tool.ruff.lint]
+# explicit rule set so new ruff releases don't change what CI enforces
+select = ["E", "F", "W", "B"]
+ignore = ["E501", "B008"]

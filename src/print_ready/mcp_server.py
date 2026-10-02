@@ -8,7 +8,16 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from mcp.server.fastmcp import FastMCP, Image
+try:  # MCP Python SDK 2.x
+    from mcp.server.mcpserver import Image
+    from mcp.server.mcpserver import MCPServer as _Server
+
+    MCP_V2 = True
+except ImportError:  # SDK 1.x
+    from mcp.server.fastmcp import FastMCP as _Server
+    from mcp.server.fastmcp import Image
+
+    MCP_V2 = False
 
 from . import __version__
 from .specs import SHEETS, SpecError, get_product, list_products
@@ -26,7 +35,7 @@ Typical flow when a user wants something printed:
 Never claim a file is print-ready without running preflight_check or make_print_ready.
 All file paths are on the machine running this server."""
 
-mcp = FastMCP("print-ready", instructions=INSTRUCTIONS)
+mcp = _Server("print-ready", instructions=INSTRUCTIONS)
 
 
 def _spec(product, width_mm, height_mm, bleed_mm=None, safe_mm=None, dpi=None):
@@ -151,9 +160,12 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--port", type=int, default=8000)
     a = ap.parse_args(argv)
     if a.http:
-        mcp.settings.host = a.host
-        mcp.settings.port = a.port
-        mcp.run(transport="streamable-http")
+        if MCP_V2:
+            mcp.run(transport="streamable-http", host=a.host, port=a.port)
+        else:
+            mcp.settings.host = a.host
+            mcp.settings.port = a.port
+            mcp.run(transport="streamable-http")
     else:
         mcp.run()
 
