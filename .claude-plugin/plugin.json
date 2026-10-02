@@ -1,0 +1,10 @@
+{
+  "name": "print-ready",
+  "version": "0.1.0",
+  "description": "Make any design print-ready: preflight, bleed, CMYK, crop marks, visual proofs, n-up imposition and instant print quotes.",
+  "author": { "name": "iClick Solutions" },
+  "homepage": "https://github.com/sharikwani/print-ready",
+  "repository": "https://github.com/sharikwani/print-ready",
+  "license": "MIT",
+  "keywords": ["print", "prepress", "bleed", "cmyk", "pdf", "design"]
+}

@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "print-ready"
+version = "0.1.0"
+description = "Make any design print-ready from your AI assistant: preflight, bleed, CMYK, crop marks, proofs and imposition. CLI + MCP server + Agent Skill."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "iClick Solutions" }]
+keywords = ["print", "prepress", "preflight", "bleed", "cmyk", "pdf", "mcp", "agent-skills", "claude", "chatgpt", "ai"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: End Users/Desktop",
+  "Programming Language :: Python :: 3",
+  "Topic :: Multimedia :: Graphics",
+  "Topic :: Printing",
+]
+dependencies = [
+  "pillow>=10.3",
+  "numpy>=1.24",
+  "pikepdf>=8.0",
+  "pypdfium2>=4.25",
+  "mcp>=1.9",
+]
+
+[project.optional-dependencies]
+render = ["playwright>=1.44"]
+dev = ["pytest>=8", "reportlab>=4", "ruff>=0.5"]
+
+[project.urls]
+Homepage = "https://github.com/sharikwani/print-ready"
+Issues = "https://github.com/sharikwani/print-ready/issues"
+
+[project.scripts]
+printready = "print_ready.cli:main"
+printready-mcp = "print_ready.mcp_server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/print_ready"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "skills", "README.md", "LICENSE"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 130
+target-version = "py310"

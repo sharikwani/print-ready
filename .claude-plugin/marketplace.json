@@ -1,0 +1,11 @@
+{
+  "name": "print-ready",
+  "owner": { "name": "iClick Solutions" },
+  "plugins": [
+    {
+      "name": "print-ready",
+      "source": "./",
+      "description": "Make any design print-ready: preflight, bleed, CMYK, crop marks, proofs, imposition and quotes."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "print-ready": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/sharikwani/print-ready", "printready", "mcp"]
+    }
+  }
+}
